@@ -8,11 +8,18 @@ async function fetchSearchResults() {
     try {
         const response = await fetch(apiUrl);
         const html = await response.text(); // Get the response as HTML text
-    
-        // Display the HTML response
-        const resultsContainer = document.getElementById("search-results");
-        resultsContainer.innerHTML = html;
-      } catch (error) {
+
+        // Create a temporary div to hold the fetched HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+
+        // Extract the content you want to update
+        const updatedContent = tempDiv.querySelector('.products.columns-4').innerHTML;
+
+        // Update the content inside the <ul> element
+        const ulElement = document.querySelector('.products.columns-4');
+        ulElement.innerHTML = updatedContent;
+    } catch (error) {
         console.error("Error fetching search results:", error);
-      }
     }
+}
