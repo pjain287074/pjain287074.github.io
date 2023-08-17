@@ -37,7 +37,7 @@ async function fetchMoreResults() {
 
     const searchInput = document.getElementById("shoptop-product-search-field-0");
     const searchQuery = searchInput.value.replace(/ /g, '+');
-    const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/${searchQuery}?page=${page}&per_page=${resultsPerPage}`;
+    const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/${searchQuery}`;
 
     try {
         const response = await fetch(apiUrl);
