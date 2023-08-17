@@ -65,7 +65,7 @@ async function fetchMoreResults(searchQuery = null) {
 }
 
 // Assuming you have a search form with id "search-form"
-document.getElementById('search-form').addEventListener('submit', function(event) {
+document.getElementById('search-box').addEventListener('submit', function(event) {
     event.preventDefault();
     const searchInput = document.getElementById("shoptop-product-search-field-0");
     const searchQuery = searchInput.value.replace(/ /g, '+');
