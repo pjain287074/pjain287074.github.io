@@ -29,7 +29,7 @@ let page = 4;
 const resultsPerPage = 10; // Adjust this as needed
 let loading = false;
 
-async function fetchMoreResults(searchQuery = null) {
+async function fetchMoreResults(searchQuery = null, category = null) {
     if (loading) return;
 
     loading = true;
@@ -38,9 +38,8 @@ async function fetchMoreResults(searchQuery = null) {
     let apiUrl;
     if (searchQuery) {
         apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/${searchQuery}`;
-    } else {
-        const currentCategory = // Get the current navigation category
-        apiUrl = `https://flipkart-api.pjain287074.workers.dev//search/tv`;
+    } else (category) {
+        apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/tv`;
     }
 
     try {
@@ -64,8 +63,19 @@ async function fetchMoreResults(searchQuery = null) {
     }
 }
 
+// Add a scroll event listener
+window.addEventListener('scroll', function () {
+    const scrollThreshold = 200; // Adjust this threshold as needed
+
+    const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - scrollThreshold;
+
+    if (scrolledToBottom) {
+        fetchMoreResults();
+    }
+});
+
 // Assuming you have a search form with id "search-form"
-document.getElementById('search-box').addEventListener('submit', function(event) {
+document.getElementById('search-box').addEventListener('submit', function (event) {
     event.preventDefault();
     const searchInput = document.getElementById("shoptop-product-search-field-0");
     const searchQuery = searchInput.value.replace(/ /g, '+');
@@ -74,10 +84,9 @@ document.getElementById('search-box').addEventListener('submit', function(event)
 
 // Assuming you have navigation links with class "nav-link"
 document.querySelectorAll('.menu-item').forEach(link => {
-    link.addEventListener('click', function(event) {
+    link.addEventListener('click', function (event) {
         event.preventDefault();
         const category = this.querySelector('a').getAttribute('href'); // Get the category from the href attribute
         fetchMoreResults(null, category);
     });
 });
-In 
