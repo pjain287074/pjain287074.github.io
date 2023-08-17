@@ -29,15 +29,19 @@ let page = 4;
 const resultsPerPage = 10; // Adjust this as needed
 let loading = false;
 
-async function fetchMoreResults() {
+async function fetchMoreResults(searchQuery = null) {
     if (loading) return;
 
     loading = true;
     document.getElementById('loading-indicator').style.display = 'block';
 
-    const searchInput = document.getElementById("shoptop-product-search-field-0");
-    const searchQuery = searchInput.value.replace(/ /g, '+');
-    const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/${searchQuery}`;
+    let apiUrl;
+    if (searchQuery) {
+        apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/${searchQuery}`;
+    } else {
+        const currentCategory = // Get the current navigation category
+        apiUrl = `https://flipkart-api.pjain287074.workers.dev//search/tv`;
+    }
 
     try {
         const response = await fetch(apiUrl);
@@ -60,13 +64,20 @@ async function fetchMoreResults() {
     }
 }
 
-// Add a scroll event listener to trigger loading more results
-window.addEventListener('scroll', () => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
-        fetchMoreResults();
-    }
+// Assuming you have a search form with id "search-form"
+document.getElementById('search-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const searchInput = document.getElementById("shoptop-product-search-field-0");
+    const searchQuery = searchInput.value.replace(/ /g, '+');
+    fetchMoreResults(searchQuery);
 });
 
-// Initial fetch
-fetchMoreResults();
+// Assuming you have navigation links with class "nav-link"
+document.querySelectorAll('.menu-item').forEach(link => {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const category = this.querySelector('a').getAttribute('href'); // Get the category from the href attribute
+        fetchMoreResults(null, category);
+    });
+});
+In 
