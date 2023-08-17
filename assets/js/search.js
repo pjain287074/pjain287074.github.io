@@ -25,7 +25,7 @@ async function fetchSearchResults() {
 }
 
 
-let page = 1;
+let page = 4;
 const resultsPerPage = 40; // Adjust this as needed
 let loading = false;
 
@@ -69,4 +69,4 @@ window.addEventListener('scroll', () => {
 });
 
 // Initial fetch
-fetchMoreResults();
+// fetchMoreResults();
