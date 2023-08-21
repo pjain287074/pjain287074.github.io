@@ -23,3 +23,41 @@ async function fetchSearchResults() {
         console.error("Error fetching search results:", error);
     }
 }
+
+
+const productContainer = document.getElementById('productContainer');
+const loadingIndicator = document.getElementById('loading-indicator');
+let page = 1; // Current page of products
+let loading = false; // To prevent multiple API calls on a single scroll event
+
+function loadMoreProducts() {
+  if (loading) return;
+  loading = true;
+  loadingIndicator.style.display = 'block';
+
+  // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
+  const apiUrl = `YOUR_API_ENDPOINT?page=${page}`;
+
+  fetch(apiUrl)
+    .then(response => response.text())
+    .then(htmlResponse => {
+      productContainer.insertAdjacentHTML('beforeend', htmlResponse);
+      loading = false;
+      page++;
+      loadingIndicator.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Error loading more products:', error);
+      loading = false;
+      loadingIndicator.style.display = 'none';
+    });
+}
+
+// Detect when user scrolls to the bottom of the page
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight - 85) {
+    loadMoreProducts();
+  }
+});
