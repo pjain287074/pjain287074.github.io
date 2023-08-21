@@ -33,10 +33,10 @@ let loading = false; // To prevent multiple API calls on a single scroll event
 function loadMoreProducts() {
   if (loading) return;
   loading = true;
-  loadingIndicator.style.display = 'block';
+  document.getElementById('loading-indicator').style.display = 'block';
 
   // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-  const apiUrl = `YOUR_API_ENDPOINT?page=${page}`;
+  const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/tv`;
 
   fetch(apiUrl)
     .then(response => response.text())
