@@ -25,39 +25,46 @@ async function fetchSearchResults() {
 }
 
 
-const productContainer = document.getElementById('productContainer');
-const loadingIndicator = document.getElementById('loading-indicator');
-let page = 1; // Current page of products
-let loading = false; // To prevent multiple API calls on a single scroll event
+let page = 1;
+const resultsPerPage = 10; // Adjust this as needed
+let loading = false;
 
-function loadMoreProducts() {
-  if (loading) return;
-  loading = true;
-  document.getElementById('loading-indicator').style.display = 'block';
+async function fetchMoreResults() {
+    if (loading) return;
 
-  // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-  const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/tv`;
+    loading = true;
+    document.getElementById('loading-indicator').style.display = 'block';
 
-  fetch(apiUrl)
-    .then(response => response.text())
-    .then(htmlResponse => {
-      productContainer.insertAdjacentHTML('beforeend', htmlResponse);
-      loading = false;
-      page++;
-      loadingIndicator.style.display = 'none';
-    })
-    .catch(error => {
-      console.error('Error loading more products:', error);
-      loading = false;
-      loadingIndicator.style.display = 'none';
-    });
+    const apiUrl = `https://flipkart-api.pjain287074.workers.dev/search/women+wear`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const html = await response.text();
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+
+        const newResults = tempDiv.querySelector('.products.columns-4').innerHTML;
+        const ulElement = document.querySelector('.products.columns-4');
+        ulElement.innerHTML += newResults;
+
+        page++;
+        loading = false;
+        document.getElementById('loading-indicator').style.display = 'none';
+    } catch (error) {
+        console.error("Error fetching more results:", error);
+        loading = false;
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
 }
 
-// Detect when user scrolls to the bottom of the page
+// Add a scroll event listener to trigger loading more results
 window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  if (scrollTop + clientHeight >= scrollHeight - 85) {
-    loadMoreProducts();
-  }
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+        fetchMoreResults();
+    }
 });
+
+// Initial fetch
+// fetchMoreResults();
